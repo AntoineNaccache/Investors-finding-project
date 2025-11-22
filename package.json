@@ -46,6 +46,7 @@
     "prepare": "husky",
     "playwright:install": "playwright install",
     "mcp:orchestrator": "tsx ./mcp_servers/orchestrator.ts",
+    "generate:api-key": "tsx scripts/generate-api-key.ts",
     "check": "pnpm lint:fix && pnpm check-types && pnpm test"
   },
   "dependencies": {
