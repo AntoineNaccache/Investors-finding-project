@@ -8,6 +8,12 @@ This project automates the investor discovery process by analyzing startup docum
 
 ## Architecture & Workflow
 
+![Architecture Diagram](docs/images/architecture-diagram.jpg)
+
+![Workflow Overview](docs/images/workflow-overview.jpg)
+
+![System Components](docs/images/system-components.jpg)
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                           INPUT STAGE                                    │
