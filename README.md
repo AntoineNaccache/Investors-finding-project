@@ -225,6 +225,29 @@ See [`.env.example`](.env.example) for all configuration options.
    - Export matched investors
    - Track outreach progress
 
+## Testing
+
+### Run Tests
+
+```bash
+# Unit tests
+pnpm test
+
+# E2E tests
+pnpm test:e2e
+
+# All checks (lint + types + tests)
+pnpm check
+```
+
+### Test Coverage
+
+- **Unit Tests**: Deepflow matching, file processing, MCP integration
+- **E2E Tests**: Complete investor finding workflow
+- **Fixtures**: Sample documents for testing
+
+See [Testing Guide](docs/guides/TESTING.md) for comprehensive testing documentation.
+
 ## Documentation
 
 - 📁 [Project Structure](PROJECT_STRUCTURE.md) - Detailed folder organization
@@ -232,6 +255,7 @@ See [`.env.example`](.env.example) for all configuration options.
 - ⚙️ [Backend Services](backend/README.md) - Backend architecture
 - 🔒 [E2B Sandbox](backend/e2b-sandbox/README.md) - Secure data handling
 - 🎯 [Deepflow Engine](backend/deepflow-engine/README.md) - Matching algorithm
+- 🧪 [Testing Guide](docs/guides/TESTING.md) - Testing documentation
 
 ## Contributing
 
