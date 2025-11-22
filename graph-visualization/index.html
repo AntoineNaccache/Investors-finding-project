@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radial Graph Visualisation</title>
+    <script src="https://unpkg.com/cytoscape@3.28.1/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-cose-bilkent@4.1.0/cytoscape-cose-bilkent.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+        }
+
+        #cy {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+        }
+
+        #legend {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #legend h4 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .legend-color.hexagon {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+        }
+    </style>
+</head>
+<body>
+    <div id="legend">
+        <h4>Legend</h4>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #e74c3c; width: 30px; height: 30px;"></div>
+            <span>Founder</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #3498db; width: 24px; height: 24px;"></div>
+            <span>Connection</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color hexagon" style="background: #2ecc71; width: 24px; height: 24px;"></div>
+            <span>VC</span>
+        </div>
+    </div>
+
+    <div id="cy"></div>
+
+    <script>
+        // Register COSE-Bilkent layout
+        if (typeof cytoscapeCoseBilkent !== 'undefined') {
+            cytoscape.use(cytoscapeCoseBilkent);
+        }
+
+        let cy;
+
+        // Initialize Cytoscape instance
+        function initCytoscape() {
+            cy = cytoscape({
+                container: document.getElementById('cy'),
+
+                style: [
+                    // Default node style
+                    {
+                        selector: 'node',
+                        style: {
+                            'label': 'data(label)',
+                            'text-valign': 'center',
+                            'text-halign': 'center',
+                            'font-size': '12px',
+                            'color': '#333',
+                            'text-outline-color': '#fff',
+                            'text-outline-width': 2,
+                            'background-color': '#999',
+                            'width': 40,
+                            'height': 40,
+                            'border-width': 2,
+                            'border-color': '#555'
+                        }
+                    },
+                    // Founder node - large, centered, red
+                    {
+                        selector: 'node[group="founder"]',
+                        style: {
+                            'background-color': '#e74c3c',
+                            'border-color': '#c0392b',
+                            'width': 80,
+                            'height': 80,
+                            'font-size': '16px',
+                            'font-weight': 'bold',
+                            'border-width': 3
+                        }
+                    },
+                    // Connection node - medium, blue
+                    {
+                        selector: 'node[group="connection"]',
+                        style: {
+                            'background-color': '#3498db',
+                            'border-color': '#2980b9',
+                            'width': 60,
+                            'height': 60,
+                            'font-size': '14px',
+                            'border-width': 2
+                        }
+                    },
+                    // VC node - hexagon, green, outer ring
+                    {
+                        selector: 'node[group="vc"]',
+                        style: {
+                            'background-color': '#2ecc71',
+                            'border-color': '#27ae60',
+                            'shape': 'hexagon',
+                            'width': 60,
+                            'height': 60,
+                            'font-size': '13px',
+                            'border-width': 2
+                        }
+                    },
+                    // Edge styles
+                    {
+                        selector: 'edge',
+                        style: {
+                            'width': 2,
+                            'line-color': '#bbb',
+                            'target-arrow-color': '#bbb',
+                            'target-arrow-shape': 'triangle',
+                            'curve-style': 'bezier',
+                            'opacity': 0.6
+                        }
+                    },
+                    // Highlighted node on hover
+                    {
+                        selector: 'node:selected',
+                        style: {
+                            'border-width': 4,
+                            'border-color': '#f39c12',
+                            'background-color': '#f39c12'
+                        }
+                    },
+                    // Highlighted edge
+                    {
+                        selector: 'edge:selected',
+                        style: {
+                            'line-color': '#f39c12',
+                            'width': 3,
+                            'opacity': 1
+                        }
+                    }
+                ],
+
+                layout: {
+                    name: 'preset'
+                },
+
+                // Enable interactions
+                minZoom: 0.3,
+                maxZoom: 3,
+                wheelSensitivity: 0.2
+            });
+
+            // Add hover effects
+            cy.on('mouseover', 'node', function(evt) {
+                const node = evt.target;
+                node.style('border-width', '4px');
+                node.style('border-color', '#f39c12');
+            });
+
+            cy.on('mouseout', 'node', function(evt) {
+                const node = evt.target;
+                const group = node.data('group');
+                if (group === 'founder') {
+                    node.style('border-width', '3px');
+                    node.style('border-color', '#c0392b');
+                } else {
+                    node.style('border-width', '2px');
+                    if (group === 'connection') {
+                        node.style('border-color', '#2980b9');
+                    } else if (group === 'vc') {
+                        node.style('border-color', '#27ae60');
+                    }
+                }
+            });
+
+            // Highlight connected nodes on click
+            cy.on('tap', 'node', function(evt) {
+                const node = evt.target;
+                const connectedEdges = node.connectedEdges();
+                const connectedNodes = connectedEdges.connectedNodes();
+
+                cy.elements().style('opacity', 0.3);
+                node.style('opacity', 1);
+                connectedEdges.style('opacity', 1);
+                connectedNodes.style('opacity', 1);
+            });
+
+            cy.on('tap', function(evt) {
+                if (evt.target === cy) {
+                    cy.elements().style('opacity', 1);
+                    cy.nodes().forEach(node => {
+                        const group = node.data('group');
+                        if (group === 'founder') {
+                            node.style('background-color', '#e74c3c');
+                        } else if (group === 'connection') {
+                            node.style('background-color', '#3498db');
+                        } else if (group === 'vc') {
+                            node.style('background-color', '#2ecc71');
+                        }
+                    });
+                }
+            });
+        }
+
+        // Validate JSON structure
+        function validateJSON(data) {
+            const errors = [];
+
+            if (!data.elements || !Array.isArray(data.elements)) {
+                errors.push('Missing or invalid "elements" array');
+                return { valid: false, errors };
+            }
+
+            const nodes = data.elements.filter(el => el.data && el.data.id && !el.data.source && !el.data.target);
+            const edges = data.elements.filter(el => el.data && el.data.source && el.data.target);
+
+            const nodeIds = new Set(nodes.map(n => n.data.id));
+
+            // Check for founder node
+            const founders = nodes.filter(n => n.data.group === 'founder');
+            if (founders.length === 0) {
+                errors.push('No founder node found');
+            }
+
+            // Validate edge references
+            edges.forEach((edge, idx) => {
+                if (!nodeIds.has(edge.data.source)) {
+                    errors.push(`Edge ${idx}: source "${edge.data.source}" not found`);
+                }
+                if (!nodeIds.has(edge.data.target)) {
+                    errors.push(`Edge ${idx}: target "${edge.data.target}" not found`);
+                }
+            });
+
+            return {
+                valid: errors.length === 0,
+                errors,
+                nodes: nodes.length,
+                edges: edges.length
+            };
+        }
+
+        // Load and render graph
+        function loadGraph(data) {
+            const validation = validateJSON(data);
+
+            if (!validation.valid) {
+                console.error('Validation errors:', validation.errors);
+                throw new Error('Invalid graph data: ' + validation.errors.join(', '));
+            }
+
+            // Add elements to graph
+            cy.elements().remove();
+            cy.add(data.elements);
+
+            // Choose layout based on availability
+            const layoutName = (typeof cytoscapeCoseBilkent !== 'undefined') ? 'cose-bilkent' : 'cose';
+
+            // Apply radial layout
+            const layoutConfig = layoutName === 'cose-bilkent' ? {
+                name: 'cose-bilkent',
+                quality: 'proof',
+                nodeDimensionsIncludeLabels: true,
+                idealEdgeLength: 200,
+                nodeRepulsion: 8000,
+                gravity: 0.5,
+                numIter: 2500,
+                tile: false,
+                animate: 'end',
+                animationDuration: 1000,
+                randomize: false,
+                fit: true,
+                padding: 50
+            } : {
+                name: 'cose',
+                idealEdgeLength: 200,
+                nodeOverlap: 20,
+                refresh: 20,
+                fit: true,
+                padding: 50,
+                randomize: false,
+                componentSpacing: 100,
+                nodeRepulsion: 400000,
+                edgeElasticity: 100,
+                nestingFactor: 5,
+                gravity: 80,
+                numIter: 1000,
+                initialTemp: 200,
+                coolingFactor: 0.95,
+                minTemp: 1.0
+            };
+
+            const layout = cy.layout(layoutConfig);
+            layout.run();
+        }
+
+        // Initialize on page load and fetch JSON
+        initCytoscape();
+
+        // Load JSON file - defaults to sample-graph.json
+        const urlParams = new URLSearchParams(window.location.search);
+        const jsonFile = urlParams.get('json') || 'sample-graph.json';
+
+        fetch(jsonFile)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to load ${jsonFile}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                loadGraph(data);
+            })
+            .catch(error => {
+                console.error('Error loading graph:', error);
+                document.body.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif;">
+                        <div style="text-align: center; color: #e74c3c;">
+                            <h2>Error Loading Graph</h2>
+                            <p>${error.message}</p>
+                            <p style="color: #666; font-size: 14px;">Expected: ${jsonFile}</p>
+                            <p style="color: #666; font-size: 12px; margin-top: 20px;">Check browser console for details</p>
+                        </div>
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>

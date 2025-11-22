@@ -1,0 +1,221 @@
+{
+  "elements": [
+    {
+      "data": {
+        "id": "founder1",
+        "label": "Sarah Chen",
+        "group": "founder"
+      }
+    },
+    {
+      "data": {
+        "id": "conn1",
+        "label": "Michael Torres",
+        "group": "connection"
+      }
+    },
+    {
+      "data": {
+        "id": "conn2",
+        "label": "Emily Rodriguez",
+        "group": "connection"
+      }
+    },
+    {
+      "data": {
+        "id": "conn3",
+        "label": "James Park",
+        "group": "connection"
+      }
+    },
+    {
+      "data": {
+        "id": "conn4",
+        "label": "Lisa Anderson",
+        "group": "connection"
+      }
+    },
+    {
+      "data": {
+        "id": "conn5",
+        "label": "David Kim",
+        "group": "connection"
+      }
+    },
+    {
+      "data": {
+        "id": "vc1",
+        "label": "Sequoia Capital",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc2",
+        "label": "Andreessen Horowitz",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc3",
+        "label": "Accel Partners",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc4",
+        "label": "Benchmark",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc5",
+        "label": "Greylock Partners",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc6",
+        "label": "Kleiner Perkins",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc7",
+        "label": "First Round Capital",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "vc8",
+        "label": "Index Ventures",
+        "group": "vc"
+      }
+    },
+    {
+      "data": {
+        "id": "e1",
+        "source": "founder1",
+        "target": "conn1"
+      }
+    },
+    {
+      "data": {
+        "id": "e2",
+        "source": "founder1",
+        "target": "conn2"
+      }
+    },
+    {
+      "data": {
+        "id": "e3",
+        "source": "founder1",
+        "target": "conn3"
+      }
+    },
+    {
+      "data": {
+        "id": "e4",
+        "source": "founder1",
+        "target": "conn4"
+      }
+    },
+    {
+      "data": {
+        "id": "e5",
+        "source": "founder1",
+        "target": "conn5"
+      }
+    },
+    {
+      "data": {
+        "id": "e6",
+        "source": "conn1",
+        "target": "vc1"
+      }
+    },
+    {
+      "data": {
+        "id": "e7",
+        "source": "conn1",
+        "target": "vc2"
+      }
+    },
+    {
+      "data": {
+        "id": "e8",
+        "source": "conn2",
+        "target": "vc2"
+      }
+    },
+    {
+      "data": {
+        "id": "e9",
+        "source": "conn2",
+        "target": "vc3"
+      }
+    },
+    {
+      "data": {
+        "id": "e10",
+        "source": "conn2",
+        "target": "vc4"
+      }
+    },
+    {
+      "data": {
+        "id": "e11",
+        "source": "conn3",
+        "target": "vc4"
+      }
+    },
+    {
+      "data": {
+        "id": "e12",
+        "source": "conn3",
+        "target": "vc5"
+      }
+    },
+    {
+      "data": {
+        "id": "e13",
+        "source": "conn4",
+        "target": "vc5"
+      }
+    },
+    {
+      "data": {
+        "id": "e14",
+        "source": "conn4",
+        "target": "vc6"
+      }
+    },
+    {
+      "data": {
+        "id": "e15",
+        "source": "conn4",
+        "target": "vc7"
+      }
+    },
+    {
+      "data": {
+        "id": "e16",
+        "source": "conn5",
+        "target": "vc7"
+      }
+    },
+    {
+      "data": {
+        "id": "e17",
+        "source": "conn5",
+        "target": "vc8"
+      }
+    }
+  ]
+}
