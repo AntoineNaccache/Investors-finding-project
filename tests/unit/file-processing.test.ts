@@ -176,7 +176,7 @@ async function parseCSV(content: string): Promise<any[]> {
   return data;
 }
 
-function extractFinancialMetrics(content: string): any {
+function extractFinancialMetrics(_content: string): any {
   return {
     revenue: 5000000,
     growthRate: 120,

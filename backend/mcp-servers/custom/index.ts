@@ -9,11 +9,11 @@ const server = new McpServer({
 
 server.tool(
   "get_weather",
-  "Get the current weather at a location.",
   {
     latitude: z.number(),
     longitude: z.number(),
   },
+  { title: "Get the current weather at a location." },
   async ({ latitude, longitude }) => {
     const response = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m&daily=sunrise,sunset&timezone=auto`,

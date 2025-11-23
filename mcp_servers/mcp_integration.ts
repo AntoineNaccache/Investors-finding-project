@@ -56,7 +56,9 @@ async function runGroqExaExample() {
 
     // Auto-start helper: spawn detected MCP servers (TypeScript and Python)
     async function startDetectedServers(opts?: { useTsNode?: boolean; pythonCmd?: string; keepAlive?: boolean; }) {
-      const { useTsNode = true, pythonCmd = 'python', keepAlive = true } = opts || {};
+      const { pythonCmd = 'python', keepAlive = true } = opts || {};
+      // useTsNode is kept for future extensibility
+      opts?.useTsNode;
 
       const serversToStart: { file: string; type: 'ts' | 'py' }[] = [];
       for (const p of possibleServers) {
