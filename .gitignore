@@ -60,3 +60,7 @@ local-data
 openai-compatible.config.ts
 certificates
 public/uploads
+
+# Cache directories
+/node-compile-cache
+/tsx-0
